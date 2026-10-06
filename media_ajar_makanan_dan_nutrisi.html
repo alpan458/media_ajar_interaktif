@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Media Ajar: Makanan dan Nutrisi (IPA Kelas 8)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&display=swap'); /* For Arabic Text */
+
+        body {
+            font-family: 'Inter', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        .arabic-text {
+            font-family: 'Amiri', serif;
+            font-size: 2rem;
+            line-height: 2.5rem;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #10b981; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #059669; 
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Game Canvas Style */
+        #gameCanvas {
+            background-color: #e0f2fe;
+            border-radius: 0.5rem;
+            box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
+            display: block;
+            margin: 0 auto;
+            max-width: 100%;
+        }
+
+        /* Lab Flask Animation */
+        .liquid {
+            transition: all 1s ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <nav class="bg-emerald-600 text-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <i class="fas fa-leaf text-2xl mr-2"></i>
+                    <span class="font-bold text-xl tracking-tight">IPA Edu <span class="text-emerald-200">MTsN 1 Mlg</span></span>
+                </div>
+                <div class="hidden md:flex items-center space-x-4">
+                    <button onclick="openTab('materi')" class="tab-btn hover:bg-emerald-700 px-3 py-2 rounded-md font-medium transition-colors" data-target="materi">Materi</button>
+                    <button onclick="openTab('islam')" class="tab-btn hover:bg-emerald-700 px-3 py-2 rounded-md font-medium transition-colors" data-target="islam">Integrasi Islam</button>
+                    <button onclick="openTab('lab')" class="tab-btn hover:bg-emerald-700 px-3 py-2 rounded-md font-medium transition-colors" data-target="lab">Virtual Lab</button>
+                    <button onclick="openTab('game')" class="tab-btn hover:bg-emerald-700 px-3 py-2 rounded-md font-medium transition-colors" data-target="game">Game Interaktif</button>
+                    <button onclick="openTab('quiz')" class="tab-btn hover:bg-emerald-700 px-3 py-2 rounded-md font-medium transition-colors" data-target="quiz">Quiz</button>
+                </div>
+                <!-- Mobile menu button -->
+                <div class="md:hidden flex items-center">
+                    <button onclick="toggleMobileMenu()" class="text-white hover:text-emerald-200 focus:outline-none">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="hidden md:hidden bg-emerald-700 pb-3 px-2">
+            <button onclick="openTab('materi'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-white hover:bg-emerald-600">Materi</button>
+            <button onclick="openTab('islam'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-white hover:bg-emerald-600">Integrasi Islam</button>
+            <button onclick="openTab('lab'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-white hover:bg-emerald-600">Virtual Lab</button>
+            <button onclick="openTab('game'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-white hover:bg-emerald-600">Game Interaktif</button>
+            <button onclick="openTab('quiz'); toggleMobileMenu()" class="block w-full text-left px-3 py-2 rounded-md text-base font-medium text-white hover:bg-emerald-600">Quiz</button>
+        </div>
+    </nav>
+
+    <!-- Header / Hero Section -->
+    <header class="bg-emerald-50 py-12 border-b border-emerald-100">
+        <div class="max-w-4xl mx-auto text-center px-4">
+            <h1 class="text-4xl md:text-5xl font-bold text-emerald-800 mb-4">Makanan dan Nutrisi</h1>
+            <p class="text-lg text-emerald-600 mb-2">Ilmu Pengetahuan Alam - Kelas 8 (Terintegrasi Biologi SMA Kelas 11)</p>
+            <p class="text-sm text-gray-500 font-medium bg-white inline-block px-4 py-2 rounded-full shadow-sm border border-gray-100">
+                Disusun oleh: <span class="font-bold text-emerald-700">Alpan Ibrahim S.Si.</span> | MTsN 1 Kota Malang
+            </p>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 py-8 mb-12">
+
+        <!-- TAB: MATERI DETAIL -->
+        <section id="materi" class="tab-content active">
+            <div class="bg-white rounded-xl shadow-md p-6 md:p-8">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-6 flex items-center border-b pb-4">
+                    <i class="fas fa-book-open mr-3"></i> Eksplorasi Nutrisi Tubuh Kita
+                </h2>
+                
+                <div class="prose max-w-none text-gray-700 text-lg leading-relaxed">
+                    <p class="mb-4">
+                        Pernahkah kamu berpikir, kenapa kita harus makan? Selain karena lapar, makanan adalah bahan bakar utama tubuh kita. Ibarat motor butuh bensin, tubuh kita butuh <strong>Nutrisi</strong>. Nutrisi adalah zat gizi dalam makanan yang menyediakan energi, bahan pembangun jaringan, dan pengatur fungsi tubuh.
+                    </p>
+
+                    <div class="grid md:grid-cols-2 gap-8 my-8">
+                        <div class="bg-blue-50 p-6 rounded-lg border border-blue-100">
+                            <h3 class="text-xl font-bold text-blue-800 mb-3"><i class="fas fa-bread-slice mr-2"></i>Makronutrien (Butuh Banyak)</h3>
+                            <ul class="space-y-3">
+                                <li><strong>Karbohidrat:</strong> Sumber energi utama. Terdapat pada nasi, roti, kentang. Dipecah menjadi <em>Glukosa</em>.</li>
+                                <li><strong>Protein:</strong> Zat pembangun sel, otot, dan enzim. Ada hewani (daging, telur) dan nabati (tahu, tempe). Dipecah menjadi <em>Asam Amino</em>.</li>
+                                <li><strong>Lemak (Lipid):</strong> Cadangan energi terbesar dan pelarut vitamin (A, D, E, K). Dipecah menjadi <em>Asam Lemak dan Gliserol</em>.</li>
+                            </ul>
+                        </div>
+                        <div class="bg-yellow-50 p-6 rounded-lg border border-yellow-100">
+                            <h3 class="text-xl font-bold text-yellow-800 mb-3"><i class="fas fa-carrot mr-2"></i>Mikronutrien (Butuh Sedikit)</h3>
+                            <ul class="space-y-3">
+                                <li><strong>Vitamin:</strong> Mengatur fungsi tubuh. Contoh: Vit C untuk imun, Vit A untuk mata.</li>
+                                <li><strong>Mineral:</strong> Zat anorganik pengatur kerja sel. Contoh: Kalsium untuk tulang, Zat Besi untuk sel darah merah.</li>
+                                <li><strong>Air:</strong> Pelarut utama, mengatur suhu tubuh. 60-70% tubuh kita adalah air!</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="bg-emerald-50 rounded-lg p-6 border-l-4 border-emerald-500 my-8 shadow-sm">
+                        <h3 class="text-xl font-bold text-emerald-800 mb-2 flex items-center">
+                            <i class="fas fa-link mr-2"></i> Koneksi SMA: Sistem Pencernaan (Biologi Kelas 11)
+                        </h3>
+                        <p class="text-sm md:text-base">
+                            Nantinya di bangku SMA, materi ini akan diperdalam pada bab <strong>Sistem Pencernaan</strong>. Kalian tidak hanya belajar tentang jenis nutrisinya, tapi bagaimana nutrisi itu diubah secara kimiawi!
+                        </p>
+                        <ul class="list-disc ml-5 mt-2 text-sm md:text-base space-y-1">
+                            <li><strong>Enzim Pencernaan:</strong> Karbohidrat dipecah oleh enzim <em>Amilase</em>. Protein oleh <em>Pepsin & Tripsin</em>. Lemak oleh <em>Lipase</em>.</li>
+                            <li><strong>Absorpsi:</strong> Nutrisi yang sudah disederhanakan akan diserap oleh <em>Vili</em> (jonjot usus) di Usus Halus dan diedarkan oleh darah.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB: INTEGRASI ISLAM -->
+        <section id="islam" class="tab-content">
+            <div class="bg-white rounded-xl shadow-md p-6 md:p-8">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-6 flex items-center border-b pb-4">
+                    <i class="fas fa-star-and-crescent mr-3"></i> Nutrisi dalam Perspektif Islam
+                </h2>
+
+                <div class="grid md:grid-cols-2 gap-8 items-start">
+                    <div>
+                        <p class="text-gray-700 text-lg mb-4">
+                            Islam sangat memperhatikan kesehatan umatnya. Aturan makan dalam Islam tidak sekadar kenyang, tapi harus memenuhi dua syarat utama: <strong>Halalan Thoyyiban</strong> (Halal dan Baik/Bergizi).
+                        </p>
+                        
+                        <div class="bg-emerald-50 p-5 rounded-lg mb-6 border border-emerald-200 text-center">
+                            <p class="arabic-text text-emerald-900 mb-3" dir="rtl">
+                                يَا أَيُّهَا النَّاسُ كُلُوا مِمَّا فِي الْأَرْضِ حَلَالًا طَيِّبًا
+                            </p>
+                            <p class="text-sm italic text-gray-600 mb-2">
+                                "Wahai manusia! Makanlah dari (makanan) yang halal dan baik yang terdapat di bumi..."
+                            </p>
+                            <p class="font-bold text-emerald-700 text-sm">(QS. Al-Baqarah: 168)</p>
+                        </div>
+
+                        <h3 class="text-xl font-bold text-gray-800 mb-3">Prinsip Makan Menurut Sunnah:</h3>
+                        <ul class="space-y-3 text-gray-700">
+                            <li class="flex"><i class="fas fa-check-circle text-emerald-500 mt-1 mr-2"></i> <span><strong>Tidak Berlebihan:</strong> Sesuai QS Al-A'raf: 31, <em>"...makan dan minumlah, dan janganlah berlebih-lebihan."</em> Kekenyangan berlebih adalah sumber penyakit.</span></li>
+                            <li class="flex"><i class="fas fa-check-circle text-emerald-500 mt-1 mr-2"></i> <span><strong>Konsep Sepertiga:</strong> Sabda Nabi SAW, bagilah perut untuk 1/3 makanan, 1/3 minuman, dan 1/3 udara (napas).</span></li>
+                            <li class="flex"><i class="fas fa-check-circle text-emerald-500 mt-1 mr-2"></i> <span><strong>Menjaga Kebersihan:</strong> Mencuci tangan sebelum dan sesudah makan adalah bagian dari fitrah kebersihan dalam Islam.</span></li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-gray-50 rounded-xl p-6 shadow-inner border border-gray-200">
+                        <h3 class="text-xl font-bold text-center text-emerald-800 mb-4"><i class="fas fa-hands-praying mr-2"></i>Adab & Doa</h3>
+                        
+                        <div class="mb-6 bg-white p-4 rounded-lg shadow-sm">
+                            <h4 class="font-bold text-gray-700 mb-2">Doa Sebelum Makan</h4>
+                            <p class="arabic-text text-right text-emerald-900 mb-2" dir="rtl">اللَّهُمَّ بَارِكْ لَنَا فِيمَا رَزَقْتَنَا وَقِنَا عَذَابَ النَّارِ</p>
+                            <p class="text-sm text-gray-600 italic">"Allahumma baarik lanaa fiimaa rozaqtanaa wa qinaa 'adzaa bannaar."</p>
+                            <p class="text-xs text-gray-500 mt-1">Artinya: "Ya Allah, berkahilah kami dalam rezeki yang telah Engkau berikan kepada kami dan peliharalah kami dari siksa api neraka."</p>
+                        </div>
+
+                        <div class="bg-white p-4 rounded-lg shadow-sm">
+                            <h4 class="font-bold text-gray-700 mb-2">Doa Sesudah Makan</h4>
+                            <p class="arabic-text text-right text-emerald-900 mb-2" dir="rtl">الْحَمْدُ لِلَّهِ الَّذِي أَطْعَمَنَا وَسَقَانَا وَجَعَلَنَا مُسْلِمِينَ</p>
+                            <p class="text-sm text-gray-600 italic">"Alhamdulillahil ladzi ath'amana wa saqana wa ja'alana minal muslimin."</p>
+                            <p class="text-xs text-gray-500 mt-1">Artinya: "Segala puji bagi Allah yang telah memberi kami makan dan minum, dan telah menjadikan kami sebagai orang-orang muslim."</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB: VIRTUAL LAB -->
+        <section id="lab" class="tab-content">
+            <div class="bg-white rounded-xl shadow-md p-6 md:p-8">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-2 flex items-center">
+                    <i class="fas fa-flask mr-3"></i> Virtual Lab: Uji Zat Makanan
+                </h2>
+                <p class="text-gray-600 mb-6 border-b pb-4">Simulasi praktikum untuk mengetahui kandungan nutrisi pada bahan makanan.</p>
+
+                <div class="grid md:grid-cols-3 gap-6">
+                    <!-- Controls -->
+                    <div class="md:col-span-1 bg-gray-50 p-4 rounded-lg border border-gray-200">
+                        <h3 class="font-bold text-lg mb-4 text-gray-800">1. Pilih Bahan Makanan:</h3>
+                        <select id="foodSelect" class="w-full p-2 mb-4 border rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                            <option value="">-- Pilih Bahan --</option>
+                            <option value="nasi">Nasi (Tumbuk)</option>
+                            <option value="putihtelur">Putih Telur</option>
+                            <option value="minyak">Minyak Goreng</option>
+                        </select>
+
+                        <h3 class="font-bold text-lg mb-4 text-gray-800">2. Pilih Reagen (Cairan Penguji):</h3>
+                        <div class="space-y-2">
+                            <button onclick="applyReagent('lugol')" class="w-full text-left px-4 py-2 bg-yellow-100 hover:bg-yellow-200 text-yellow-800 rounded-md border border-yellow-300 transition">
+                                <i class="fas fa-vial mr-2"></i> Lugol (Uji Amilum)
+                            </button>
+                            <button onclick="applyReagent('biuret')" class="w-full text-left px-4 py-2 bg-blue-100 hover:bg-blue-200 text-blue-800 rounded-md border border-blue-300 transition">
+                                <i class="fas fa-vial mr-2"></i> Biuret (Uji Protein)
+                            </button>
+                            <button onclick="applyReagent('kertas')" class="w-full text-left px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 rounded-md border border-gray-400 transition">
+                                <i class="fas fa-scroll mr-2"></i> Kertas Buram (Uji Lemak)
+                            </button>
+                        </div>
+                        
+                        <button onclick="resetLab()" class="mt-6 w-full py-2 bg-red-100 hover:bg-red-200 text-red-700 rounded-md font-bold transition">
+                            <i class="fas fa-redo mr-1"></i> Reset Lab
+                        </button>
+                    </div>
+
+                    <!-- Display -->
+                    <div class="md:col-span-2 bg-white p-6 rounded-lg border border-gray-200 flex flex-col items-center justify-center min-h-[300px] relative overflow-hidden">
+                        
+                        <!-- Test Tube Visualization -->
+                        <div id="tubeContainer" class="relative w-24 h-48 border-4 border-gray-300 border-t-0 rounded-b-full bg-white shadow-inner flex items-end justify-center pb-2">
+                            <!-- Liquid inside tube -->
+                            <div id="tubeLiquid" class="w-20 h-8 bg-gray-100 rounded-b-full liquid"></div>
+                            
+                            <!-- Food particle representation -->
+                            <div id="foodParticle" class="absolute bottom-4 text-sm font-bold text-gray-600 text-center w-full">Kosong</div>
+                        </div>
+
+                        <!-- Paper Test Visualization (Hidden by default) -->
+                        <div id="paperTest" class="hidden w-48 h-48 bg-yellow-50 border border-yellow-200 rounded shadow-sm relative flex items-center justify-center">
+                            <span class="absolute top-2 text-xs text-gray-500">Kertas Buram</span>
+                            <div id="greaseSpot" class="w-24 h-24 rounded-full bg-transparent transition-all duration-1000"></div>
+                        </div>
+
+                        <div id="labResult" class="mt-6 text-center h-16">
+                            <p class="text-gray-500 italic">Pilih bahan makanan dan teteskan reagen untuk melihat hasil uji.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB: GAME INTERAKTIF -->
+        <section id="game" class="tab-content">
+            <div class="bg-white rounded-xl shadow-md p-6 md:p-8">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-2 flex items-center">
+                    <i class="fas fa-gamepad mr-3"></i> Game: Tangkap Nutrisi Halal!
+                </h2>
+                <p class="text-gray-600 mb-4 border-b pb-4">Gerakkan keranjang dengan panah Kiri/Kanan (atau tap di layar). Tangkap makanan sehat (Halal) dan hindari makanan haram/berbahaya!</p>
+
+                <div class="flex flex-col items-center">
+                    <div class="flex justify-between w-full max-w-2xl mb-2 px-4">
+                        <div class="font-bold text-lg text-emerald-700">Skor: <span id="scoreVal">0</span></div>
+                        <div class="font-bold text-lg text-red-600">Nyawa: <span id="livesVal">3</span></div>
+                    </div>
+                    
+                    <canvas id="gameCanvas" width="600" height="400" class="border-4 border-emerald-500 max-w-full w-full h-auto"></canvas>
+                    
+                    <div id="gameControls" class="mt-4 flex space-x-4">
+                        <button id="startBtn" onclick="startGame()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-6 rounded shadow-lg transition">Mulai Main</button>
+                        <!-- Mobile controls -->
+                        <div class="flex md:hidden space-x-2">
+                            <button id="leftBtn" class="bg-gray-200 p-3 rounded-lg active:bg-gray-300"><i class="fas fa-arrow-left"></i></button>
+                            <button id="rightBtn" class="bg-gray-200 p-3 rounded-lg active:bg-gray-300"><i class="fas fa-arrow-right"></i></button>
+                        </div>
+                    </div>
+                    <p id="gameOverText" class="hidden text-2xl font-bold text-red-600 mt-4">Game Over! Skor Akhir: <span id="finalScore"></span></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB: QUIZ -->
+        <section id="quiz" class="tab-content">
+            <div class="bg-white rounded-xl shadow-md p-6 md:p-8">
+                <h2 class="text-3xl font-bold text-emerald-700 mb-2 flex items-center">
+                    <i class="fas fa-tasks mr-3"></i> Evaluasi Konsep
+                </h2>
+                <p class="text-gray-600 mb-6 border-b pb-4">Jawablah 20 pertanyaan berikut untuk menguji pemahamanmu.</p>
+
+                <div id="quizContainer" class="space-y-6">
+                    <!-- Quiz Questions will be injected here via JS -->
+                </div>
+
+                <div class="mt-8 pt-4 border-t border-gray-200 text-center">
+                    <button onclick="calculateScore()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-8 rounded-full shadow-lg text-lg transition">
+                        Kumpulkan & Lihat Skor
+                    </button>
+                </div>
+
+                <!-- Result Modal (Hidden) -->
+                <div id="resultModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                    <div class="bg-white p-8 rounded-xl max-w-md w-full text-center shadow-2xl transform scale-100 transition-transform">
+                        <h3 class="text-2xl font-bold text-gray-800 mb-2">Hasil Evaluasi</h3>
+                        <p class="text-gray-600 mb-6">Nilai kamu adalah:</p>
+                        <div class="text-6xl font-bold text-emerald-600 mb-6" id="finalScoreText">100</div>
+                        <p id="scoreFeedback" class="mb-6 font-medium text-lg"></p>
+                        <button onclick="closeModal()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2 px-6 rounded transition w-full">
+                            Tutup
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-emerald-800 text-emerald-100 py-6 text-center">
+        <p>&copy; 2026 Media Ajar IPA Terpadu. Didesain untuk MTsN 1 Kota Malang.</p>
+        <p class="text-sm mt-1 opacity-75">Oleh: Alpan Ibrahim S.Si.</p>
+    </footer>
+
+    <script>
+        // --- Navigation Logic ---
+        function openTab(tabId) {
+            // Hide all contents
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            // Show selected content
+            document.getElementById(tabId).classList.add('active');
+            
+            // Update button styles
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                if(btn.getAttribute('data-target') === tabId) {
+                    btn.classList.add('bg-emerald-800');
+                } else {
+                    btn.classList.remove('bg-emerald-800');
+                }
+            });
+            
+            window.scrollTo(0, 0);
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Initialize active tab style
+        document.querySelector('[data-target="materi"]').classList.add('bg-emerald-800');
+
+        // --- Virtual Lab Logic ---
+        const foodSelect = document.getElementById('foodSelect');
+        const tubeLiquid = document.getElementById('tubeLiquid');
+        const foodParticle = document.getElementById('foodParticle');
+        const tubeContainer = document.getElementById('tubeContainer');
+        const paperTest = document.getElementById('paperTest');
+        const greaseSpot = document.getElementById('greaseSpot');
+        const labResult = document.getElementById('labResult');
+
+        foodSelect.addEventListener('change', (e) => {
+            const food = e.target.value;
+            tubeContainer.classList.remove('hidden');
+            paperTest.classList.add('hidden');
+            tubeLiquid.style.backgroundColor = '#f3f4f6'; // Reset color
+            
+            if(food === 'nasi') {
+                foodParticle.innerText = "Nasi";
+                tubeLiquid.style.height = '30px';
+                labResult.innerHTML = '<p class="text-gray-600">Nasi siap diuji.</p>';
+            } else if(food === 'putihtelur') {
+                foodParticle.innerText = "Putih Telur";
+                tubeLiquid.style.height = '40px';
+                labResult.innerHTML = '<p class="text-gray-600">Putih telur siap diuji.</p>';
+            } else if(food === 'minyak') {
+                tubeContainer.classList.add('hidden');
+                paperTest.classList.remove('hidden');
+                greaseSpot.style.backgroundColor = 'transparent';
+                labResult.innerHTML = '<p class="text-gray-600">Minyak diteteskan ke kertas.</p>';
+            } else {
+                foodParticle.innerText = "Kosong";
+                tubeLiquid.style.height = '10px';
+                labResult.innerHTML = '<p class="text-gray-500 italic">Pilih bahan makanan.</p>';
+            }
+        });
+
+        function applyReagent(reagent) {
+            const food = foodSelect.value;
+            if(!food) {
+                alertCustom("Silakan pilih bahan makanan terlebih dahulu!");
+                return;
+            }
+
+            if(reagent === 'lugol') {
+                if(food === 'nasi') {
+                    tubeLiquid.style.backgroundColor = '#1e3a8a'; // Blue-black
+                    labResult.innerHTML = '<p class="text-emerald-600 font-bold"><i class="fas fa-check-circle"></i> Nasi berubah Biru Kehitaman. Nasi positif mengandung Amilum (Karbohidrat).</p>';
+                } else if(food === 'putihtelur') {
+                    tubeLiquid.style.backgroundColor = '#b45309'; // Brownish (Lugol color)
+                    labResult.innerHTML = '<p class="text-red-500"><i class="fas fa-times-circle"></i> Warna tetap coklat/kuning. Putih telur tidak mengandung Amilum.</p>';
+                } else {
+                    labResult.innerHTML = '<p class="text-gray-600">Uji Lugol tidak cocok untuk minyak (gunakan kertas buram).</p>';
+                }
+            } 
+            else if(reagent === 'biuret') {
+                if(food === 'putihtelur') {
+                    tubeLiquid.style.backgroundColor = '#7e22ce'; // Purple
+                    labResult.innerHTML = '<p class="text-emerald-600 font-bold"><i class="fas fa-check-circle"></i> Putih telur berubah Ungu. Positif mengandung Protein.</p>';
+                } else if(food === 'nasi') {
+                    tubeLiquid.style.backgroundColor = '#3b82f6'; // Blue (Biuret original color)
+                    labResult.innerHTML = '<p class="text-red-500"><i class="fas fa-times-circle"></i> Warna tetap biru muda. Nasi tidak mengandung Protein tinggi.</p>';
+                } else {
+                    labResult.innerHTML = '<p class="text-gray-600">Uji Biuret tidak cocok untuk minyak.</p>';
+                }
+            }
+            else if(reagent === 'kertas') {
+                if(food === 'minyak') {
+                    greaseSpot.style.backgroundColor = 'rgba(255, 255, 255, 0.6)'; // Translucent effect
+                    greaseSpot.style.boxShadow = '0 0 15px rgba(255,255,255,0.8)';
+                    labResult.innerHTML = '<p class="text-emerald-600 font-bold"><i class="fas fa-check-circle"></i> Kertas menjadi transparan/translusen. Positif mengandung Lemak.</p>';
+                } else {
+                    labResult.innerHTML = '<p class="text-red-500"><i class="fas fa-times-circle"></i> Bahan makanan ini tidak meninggalkan noda transparan (bukan lemak/hanya air yang mengering).</p>';
+                }
+            }
+        }
+
+        function resetLab() {
+            foodSelect.value = "";
+            tubeContainer.classList.remove('hidden');
+            paperTest.classList.add('hidden');
+            tubeLiquid.style.backgroundColor = '#f3f4f6';
+            tubeLiquid.style.height = '10px';
+            foodParticle.innerText = "Kosong";
+            greaseSpot.style.backgroundColor = 'transparent';
+            greaseSpot.style.boxShadow = 'none';
+            labResult.innerHTML = '<p class="text-gray-500 italic">Pilih bahan makanan dan teteskan reagen untuk melihat hasil uji.</p>';
+        }
+
+        function alertCustom(msg) {
+            // Replacing default alert
+            const div = document.createElement('div');
+            div.className = 'fixed top-20 left-1/2 transform -translate-x-1/2 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 shadow-lg z-50 rounded';
+            div.innerHTML = `<p>${msg}</p>`;
+            document.body.appendChild(div);
+            setTimeout(() => div.remove(), 3000);
+        }
+
+        // --- Game Logic ---
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        let animationId;
+        let isPlaying = false;
+        
+        let score = 0;
+        let lives = 3;
+
+        // Player (Basket)
+        const player = {
+            x: 275,
+            y: 350,
+            width: 60,
+            height: 40,
+            speed: 7,
+            dx: 0
+        };
+
+        // Items falling
+        const items = [];
+        const emojis = [
+            { char: '🍎', type: 'good', pts: 10 }, 
+            { char: '🥦', type: 'good', pts: 10 }, 
+            { char: '🥛', type: 'good', pts: 15 },
+            { char: '🍗', type: 'good', pts: 15 },
+            { char: '🍷', type: 'bad', pts: -1 }, // Haram
+            { char: '🦠', type: 'bad', pts: -1 }, // Penyakit/Kotor
+            { char: '🥓', type: 'bad', pts: -1 }  // Daging babi (Haram)
+        ];
+
+        function spawnItem() {
+            if(!isPlaying) return;
+            const r = Math.random();
+            const typeObj = emojis[Math.floor(Math.random() * emojis.length)];
+            items.push({
+                x: Math.random() * (canvas.width - 30),
+                y: -30,
+                size: 30,
+                char: typeObj.char,
+                type: typeObj.type,
+                pts: typeObj.pts,
+                speed: 2 + Math.random() * 3
+            });
+            setTimeout(spawnItem, 1000 + Math.random() * 1000);
+        }
+
+        function drawPlayer() {
+            // Draw basket
+            ctx.fillStyle = '#b45309'; // Brown
+            ctx.beginPath();
+            ctx.moveTo(player.x, player.y);
+            ctx.lineTo(player.x + player.width, player.y);
+            ctx.lineTo(player.x + player.width - 10, player.y + player.height);
+            ctx.lineTo(player.x + 10, player.y + player.height);
+            ctx.closePath();
+            ctx.fill();
+            // Basket line
+            ctx.strokeStyle = '#78350f';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+        }
+
+        function drawItems() {
+            ctx.font = '30px Arial';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            
+            for(let i=0; i<items.length; i++) {
+                let item = items[i];
+                ctx.fillText(item.char, item.x + item.size/2, item.y + item.size/2);
+            }
+        }
+
+        function updateItems() {
+            for(let i=0; i<items.length; i++) {
+                items[i].y += items[i].speed;
+
+                // Collision Detection
+                let item = items[i];
+                if(item.y + item.size > player.y && 
+                   item.y < player.y + player.height &&
+                   item.x + item.size > player.x &&
+                   item.x < player.x + player.width) {
+                    
+                    if(item.type === 'good') {
+                        score += item.pts;
+                        document.getElementById('scoreVal').innerText = score;
+                    } else {
+                        lives--;
+                        document.getElementById('livesVal').innerText = lives;
+                        if(lives <= 0) gameOver();
+                    }
+                    items.splice(i, 1);
+                    i--;
+                    continue;
+                }
+
+                // Missed Good item (optional penalty, but let's just remove it)
+                if(item.y > canvas.height) {
+                    items.splice(i, 1);
+                    i--;
+                }
+            }
+        }
+
+        function updatePlayer() {
+            player.x += player.dx;
+            
+            // Wall collision
+            if(player.x < 0) player.x = 0;
+            if(player.x + player.width > canvas.width) player.x = canvas.width - player.width;
+        }
+
+        function clearCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+        function gameLoop() {
+            if(!isPlaying) return;
+            clearCanvas();
+            drawPlayer();
+            drawItems();
+            updatePlayer();
+            updateItems();
+            animationId = requestAnimationFrame(gameLoop);
+        }
+
+        function startGame() {
+            document.getElementById('startBtn').style.display = 'none';
+            document.getElementById('gameOverText').classList.add('hidden');
+            score = 0;
+            lives = 3;
+            items.length = 0;
+            player.x = canvas.width / 2 - player.width / 2;
+            document.getElementById('scoreVal').innerText = score;
+            document.getElementById('livesVal').innerText = lives;
+            isPlaying = true;
+            spawnItem();
+            gameLoop();
+        }
+
+        function gameOver() {
+            isPlaying = false;
+            cancelAnimationFrame(animationId);
+            document.getElementById('startBtn').style.display = 'block';
+            document.getElementById('startBtn').innerText = 'Main Lagi';
+            const goText = document.getElementById('gameOverText');
+            goText.classList.remove('hidden');
+            document.getElementById('finalScore').innerText = score;
+        }
+
+        // Controls (Keyboard)
+        document.addEventListener('keydown', (e) => {
+            if(e.key === 'ArrowRight' || e.key === 'Right') {
+                player.dx = player.speed;
+                // prevent scrolling
+                if(document.getElementById('game').classList.contains('active')) e.preventDefault();
+            } else if(e.key === 'ArrowLeft' || e.key === 'Left') {
+                player.dx = -player.speed;
+                if(document.getElementById('game').classList.contains('active')) e.preventDefault();
+            }
+        });
+
+        document.addEventListener('keyup', (e) => {
+            if(e.key === 'ArrowRight' || e.key === 'Right' || e.key === 'ArrowLeft' || e.key === 'Left') {
+                player.dx = 0;
+            }
+        });
+
+        // Touch/Mouse controls on Canvas
+        canvas.addEventListener('touchstart', handleTouch, {passive: false});
+        canvas.addEventListener('touchmove', handleTouch, {passive: false});
+        canvas.addEventListener('touchend', () => { player.dx = 0; });
+        
+        function handleTouch(e) {
+            if(!isPlaying) return;
+            e.preventDefault();
+            const rect = canvas.getBoundingClientRect();
+            const touchX = e.touches[0].clientX - rect.left;
+            
+            // Adjust coordinates based on actual canvas scaling
+            const scaleX = canvas.width / rect.width;
+            const targetX = touchX * scaleX;
+
+            if (targetX < player.x + player.width/2) {
+                player.dx = -player.speed;
+            } else {
+                player.dx = player.speed;
+            }
+        }
+        
+        // Mobile Buttons fallback
+        document.getElementById('leftBtn').addEventListener('touchstart', (e) => { e.preventDefault(); player.dx = -player.speed; });
+        document.getElementById('leftBtn').addEventListener('touchend', (e) => { e.preventDefault(); player.dx = 0; });
+        document.getElementById('rightBtn').addEventListener('touchstart', (e) => { e.preventDefault(); player.dx = player.speed; });
+        document.getElementById('rightBtn').addEventListener('touchend', (e) => { e.preventDefault(); player.dx = 0; });
+
+        // --- Quiz Logic ---
+        const quizData = [
+            { q: "1. Nutrisi utama yang berfungsi sebagai sumber energi bagi tubuh adalah...", options: ["Protein", "Vitamin", "Karbohidrat", "Mineral"], answer: 2 },
+            { q: "2. Zat makanan yang berperan penting untuk membangun dan memperbaiki sel-sel tubuh yang rusak adalah...", options: ["Lemak", "Protein", "Karbohidrat", "Air"], answer: 1 },
+            { q: "3. Vitamin yang dapat larut dalam lemak adalah...", options: ["Vitamin B dan C", "Vitamin A, D, E, K", "Vitamin B1 dan B12", "Hanya Vitamin C"], answer: 1 },
+            { q: "4. Berdasarkan ayat Al-Qur'an (QS. Al-Baqarah: 168), kriteria makanan yang dianjurkan bagi umat Islam adalah...", options: ["Enak dan mahal", "Halalan Thoyyiban", "Banyak dan mengenyangkan", "Mentah dan segar"], answer: 1 },
+            { q: "5. Jika kita menguji bahan makanan menggunakan larutan Lugol dan warnanya berubah menjadi biru kehitaman, bahan tersebut mengandung...", options: ["Glukosa", "Amilum", "Protein", "Lemak"], answer: 1 },
+            { q: "6. Enzim amilase yang terdapat pada air liur berfungsi untuk memecah...", options: ["Protein menjadi asam amino", "Lemak menjadi asam lemak", "Karbohidrat menjadi glukosa", "Vitamin menjadi mineral"], answer: 2 },
+            { q: "7. Reagen Biuret digunakan untuk menguji kandungan bahan makanan berupa...", options: ["Protein", "Karbohidrat", "Vitamin C", "Lemak"], answer: 0 },
+            { q: "8. Dalam sistem pencernaan (Materi SMA), lambung menghasilkan enzim pepsin yang berfungsi memecah...", options: ["Karbohidrat", "Lemak", "Protein", "Mineral"], answer: 2 },
+            { q: "9. Kandungan makanan yang berfungsi sebagai pelarut vitamin tertentu dan cadangan energi terbesar adalah...", options: ["Air", "Lemak", "Protein", "Garam mineral"], answer: 1 },
+            { q: "10. Kebiasaan makan berlebihan dilarang dalam Islam karena dapat mendatangkan penyakit. Hal ini sesuai dengan firman Allah dalam surat...", options: ["Al-Baqarah: 183", "Al-A'raf: 31", "Al-Maidah: 3", "Al-Fatihah: 2"], answer: 1 },
+            { q: "11. Berikut ini yang merupakan contoh sumber protein nabati adalah...", options: ["Ikan dan Daging", "Telur dan Susu", "Tahu dan Tempe", "Keju dan Mentega"], answer: 2 },
+            { q: "12. Gangguan pencernaan akibat kekurangan serat dan air disebut...", options: ["Diare", "Konstipasi (Sembelit)", "Gastritis (Maag)", "Usus buntu"], answer: 1 },
+            { q: "13. Organ pencernaan manusia (Materi SMA) tempat terjadinya penyerapan sari-sari makanan paling banyak adalah...", options: ["Lambung", "Usus Besar", "Usus Halus", "Kerongkongan"], answer: 2 },
+            { q: "14. Makronutrien terdiri dari...", options: ["Vitamin, Mineral, Air", "Karbohidrat, Protein, Lemak", "Karbohidrat, Vitamin, Lemak", "Protein, Mineral, Air"], answer: 1 },
+            { q: "15. Doa sebelum makan mengajarkan kita untuk memohon...", options: ["Kekayaan", "Keberkahan rezeki dan perlindungan dari neraka", "Kelancaran pencernaan", "Makanan yang lebih enak"], answer: 1 },
+            { q: "16. Untuk membuktikan bahwa kacang tanah mengandung lemak, cara sederhana yang bisa dilakukan adalah...", options: ["Ditetesi Lugol", "Dioleskan pada kertas buram", "Dicampur Biuret", "Ditetesi Benedict"], answer: 1 },
+            { q: "17. Manakah pernyataan yang BENAR tentang air dalam tubuh manusia?", options: ["Hanya dibutuhkan saat haus", "Membentuk 10% berat tubuh", "Berfungsi mengatur suhu tubuh dan pelarut zat", "Menghasilkan energi paling besar"], answer: 2 },
+            { q: "18. Zat gizi mikro (mikronutrien) sangat dibutuhkan oleh tubuh meskipun dalam jumlah sedikit, yaitu...", options: ["Karbohidrat dan Lemak", "Protein dan Air", "Vitamin dan Mineral", "Amilum dan Glukosa"], answer: 2 },
+            { q: "19. Proses mekanis dalam pencernaan makanan utamanya terjadi di...", options: ["Mulut dengan bantuan gigi", "Kerongkongan dengan gerakan peristaltik", "Usus halus dengan bantuan enzim", "Hati dengan produksi empedu"], answer: 0 },
+            { q: "20. Konsep \"Thoyyiban\" (baik) dalam memilih makanan berarti...", options: ["Tidak mengandung unsur haram", "Berasal dari hewan", "Bergizi, aman dikonsumsi, dan menyehatkan", "Mengandung bahan pengawet agar tahan lama"], answer: 2 }
+        ];
+
+        function renderQuiz() {
+            const container = document.getElementById('quizContainer');
+            let html = '';
+            
+            quizData.forEach((q, index) => {
+                html += `
+                <div class="mb-6 p-4 bg-gray-50 rounded-lg border border-gray-100">
+                    <p class="font-bold text-gray-800 mb-3">${q.q}</p>
+                    <div class="space-y-2">
+                        ${q.options.map((opt, i) => `
+                            <label class="flex items-center space-x-3 cursor-pointer p-2 rounded hover:bg-gray-200 transition">
+                                <input type="radio" name="q${index}" value="${i}" class="form-radio h-5 w-5 text-emerald-600 focus:ring-emerald-500">
+                                <span class="text-gray-700">${opt}</span>
+                            </label>
+                        `).join('')}
+                    </div>
+                </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function calculateScore() {
+            let score = 0;
+            let answered = 0;
+
+            quizData.forEach((q, index) => {
+                const selected = document.querySelector(`input[name="q${index}"]:checked`);
+                if(selected) {
+                    answered++;
+                    if(parseInt(selected.value) === q.answer) {
+                        score += 5; // 20 questions * 5 points = 100 max
+                    }
+                }
+            });
+
+            if(answered < quizData.length) {
+                alertCustom(`Kamu baru menjawab ${answered} dari ${quizData.length} soal. Selesaikan dulu ya!`);
+                return;
+            }
+
+            // Show Result
+            document.getElementById('finalScoreText').innerText = score;
+            
+            let feedback = "";
+            if(score >= 90) feedback = "Luar biasa! Pemahamanmu sangat mantap.";
+            else if(score >= 70) feedback = "Bagus! Kamu sudah memahami konsep dengan baik.";
+            else feedback = "Terus semangat belajar! Coba ulangi baca materinya.";
+            
+            document.getElementById('scoreFeedback').innerText = feedback;
+            document.getElementById('resultModal').classList.remove('hidden');
+        }
+
+        function closeModal() {
+            document.getElementById('resultModal').classList.add('hidden');
+        }
+
+        // Initialize
+        window.onload = () => {
+            renderQuiz();
+        };
+
+    </script>
+</body>
+</html>
